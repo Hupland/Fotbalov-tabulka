@@ -85,14 +85,11 @@ function renderTable() {
             const body = tym.vypocitejBody();
             const rankClass = rank <= 3 ? ` rank-${rank}` : '';
             const diffClass = diff > 0 ? 'diff-pos' : diff < 0 ? 'diff-neg' : '';
-            const badgeType = tym instanceof TymNadstavba ? 'badge-nadstavba' : 'badge-zakladni';
-            const badgeText = tym instanceof TymNadstavba ? 'N' : 'Z';
             const diffSign = diff > 0 ? '+' : '';
             return `<tr>
       <td><span class="rank${rankClass}">${rank}</span></td>
       <td>
         <span class="team-name">${tym.jmenoTymu}</span>
-        <span class="team-type-badge ${badgeType}">${badgeText}</span>
       </td>
       <td>${tym.zapasy}</td>
       <td>${tym.vyhra}</td>
@@ -126,7 +123,7 @@ function renderTeamList() {
     }
     el.innerHTML = liga.map((t, i) => `
     <div class="team-item">
-      <span>${t.jmenoTymu} <span class="team-type-badge ${t instanceof TymNadstavba ? 'badge-nadstavba' : 'badge-zakladni'}">${t instanceof TymNadstavba ? 'N' : 'Z'}</span></span>
+      <span>${t.jmenoTymu}</span>
       <button class="del-btn" onclick="removeTeam(${i})" title="Smazat tým">✕</button>
     </div>`).join('');
 }
