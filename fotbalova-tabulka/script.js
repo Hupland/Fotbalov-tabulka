@@ -66,28 +66,29 @@ function updateStats() {
     document.getElementById('statGoals').textContent = totalGoals.toString();
 }
 function renderTable() {
-    const tbody = document.getElementById('tableBody');
-    if (liga.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9"><div class="empty"><div class="icon">🏟️</div>Zatím žádné týmy. Přidej tým v panelu vpravo.</div></td></tr>`;
-        updateStats();
-        return;
-    }
-    const sorted = [...liga].sort((a, b) => {
-        const bodyDiff = b.vypocitejBody() - a.vypocitejBody();
-        if (bodyDiff !== 0)
-            return bodyDiff;
-        return b.getRozdilSkore() - a.getRozdilSkore();
-    });
-    tbody.innerHTML = sorted.map((tym, i) => {
-        const rank = i + 1;
-        const diff = tym.getRozdilSkore();
-        const body = tym.vypocitejBody();
-        const rankClass = rank <= 3 ? ` rank-${rank}` : '';
-        const diffClass = diff > 0 ? 'diff-pos' : diff < 0 ? 'diff-neg' : '';
-        const badgeType = tym instanceof TymNadstavba ? 'badge-nadstavba' : 'badge-zakladni';
-        const badgeText = tym instanceof TymNadstavba ? 'N' : 'Z';
-        const diffSign = diff > 0 ? '+' : '';
-        return `<tr>
+    const sections = [
+        { id: 'tableBodyZakladni', teams: liga.filter(t => t.typ === 'zakladni'), emptyText: 'Zatím žádné týmy v základní části. Přidej tým v panelu vpravo.' },
+        { id: 'tableBodyNadstavba', teams: liga.filter(t => t.typ === 'nadstavba'), emptyText: 'Zatím žádné týmy v nadstavbě. Přidej tým v panelu vpravo.' }
+    ];
+    const renderRows = (teams) => {
+        if (teams.length === 0)
+            return null;
+        const sorted = [...teams].sort((a, b) => {
+            const bodyDiff = b.vypocitejBody() - a.vypocitejBody();
+            if (bodyDiff !== 0)
+                return bodyDiff;
+            return b.getRozdilSkore() - a.getRozdilSkore();
+        });
+        return sorted.map((tym, i) => {
+            const rank = i + 1;
+            const diff = tym.getRozdilSkore();
+            const body = tym.vypocitejBody();
+            const rankClass = rank <= 3 ? ` rank-${rank}` : '';
+            const diffClass = diff > 0 ? 'diff-pos' : diff < 0 ? 'diff-neg' : '';
+            const badgeType = tym instanceof TymNadstavba ? 'badge-nadstavba' : 'badge-zakladni';
+            const badgeText = tym instanceof TymNadstavba ? 'N' : 'Z';
+            const diffSign = diff > 0 ? '+' : '';
+            return `<tr>
       <td><span class="rank${rankClass}">${rank}</span></td>
       <td>
         <span class="team-name">${tym.jmenoTymu}</span>
@@ -101,7 +102,20 @@ function renderTable() {
       <td class="${diffClass}">${diffSign}${diff}</td>
       <td><span class="pts">${body}</span></td>
     </tr>`;
-    }).join('');
+        }).join('');
+    };
+    sections.forEach(section => {
+        const tbody = document.getElementById(section.id);
+        if (!tbody)
+            return;
+        const content = renderRows(section.teams);
+        if (content) {
+            tbody.innerHTML = content;
+        }
+        else {
+            tbody.innerHTML = `<tr><td colspan="9"><div class="empty"><div class="icon">🏟️</div>${section.emptyText}</div></td></tr>`;
+        }
+    });
     updateStats();
 }
 function renderTeamList() {
@@ -140,8 +154,9 @@ function addTeam() {
         showToast('Zadej název týmu!', true);
         return;
     }
-    if (liga.find(t => t.jmenoTymu.toLowerCase() === name.toLowerCase())) {
-        showToast('Tým s tímto názvem už existuje!', true);
+    const existing = liga.find(t => t.jmenoTymu.toLowerCase() === name.toLowerCase());
+    if (existing && existing.typ === typ) {
+        showToast('Tým s tímto názvem už v této části existuje!', true);
         return;
     }
     let tym;
