@@ -129,6 +129,9 @@
       color: var(--muted);
       border-bottom: 1px solid var(--border);
     }
+    /* header variants for full/short labels */
+    .full { display: inline; }
+    .short { display: none; }
     thead th:nth-child(2) { text-align: left; }
     tbody tr {
       border-bottom: 1px solid var(--border);
@@ -219,26 +222,6 @@
       transition: border-color 0.2s;
     }
     input:focus, select:focus { border-color: var(--accent); }
-    .field-hint {
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 8px;
-      font-size: 0.85rem;
-      margin-top: 0.75rem;
-      margin-bottom: 0;
-      padding: 8px 10px;
-      line-height: 1.4;
-      display: block;
-    }
-    .field-hint.small {
-      font-size: 0.78rem;
-      background: transparent;
-      border-color: transparent;
-      color: var(--muted);
-      padding: 0;
-      margin-top: 0.5rem;
-    }
  
     .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
  
@@ -346,3 +329,29 @@
       font-size: 0.9rem;
     }
     .empty .icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+
+/* Mobile: žádné posuvníky - zkracování textu (ellipsis) */
+@media (max-width: 600px) {
+  .table-wrap { overflow: visible; }
+  table { font-size: 1rem; table-layout: fixed; width: 100%; }
+  thead th { font-size: 0.82rem; padding: 8px 10px; }
+  /* sloupce: #, tým, Z, V, R, P, Skóre, +/-, Body */
+  thead th:nth-child(1) { width: 6%; }
+  thead th:nth-child(2) { width: 52%; text-align: left; }
+  thead th:nth-child(3), thead th:nth-child(4), thead th:nth-child(5),
+  thead th:nth-child(6), thead th:nth-child(7), thead th:nth-child(8),
+  thead th:nth-child(9) { width: 6%; }
+
+  tbody td { padding: 10px 8px; font-size: 0.98rem; }
+  tbody td:nth-child(2) { text-align: left; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .team-name { font-size: 1rem; display: inline-block; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; }
+  .pts { font-size: 1.2rem; }
+  .rank { width: 28px; font-size: 1rem; }
+  .empty { padding: 2rem 1rem; font-size: 0.95rem; }
+  header { padding: 0 1rem; height: 60px; }
+  header h1 { font-size: 1.4rem; }
+  .section-title { font-size: 1rem; letter-spacing: 2px; }
+  /* switch header labels on mobile */
+  .full { display: none; }
+  .short { display: inline; }
+}
