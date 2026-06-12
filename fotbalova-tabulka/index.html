@@ -1,0 +1,99 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>League Tracker Pro</title>
+    <link rel="stylesheet" href="style.css">
+ </head>
+ <body>
+    
+<header>
+  <div class="logo-badge">⚽</div>
+  <h1>League <span>Tracker</span> Pro</h1>
+  <div class="header-tag">Chance Liga Model</div>
+</header>
+ 
+<main>
+  <div>
+    <div class="stats-strip">
+      <div class="stat-box"><div class="val" id="statTeams">0</div><div class="lbl">Týmy</div></div>
+      <div class="stat-box"><div class="val" id="statMatches">0</div><div class="lbl">Zápasy</div></div>
+      <div class="stat-box"><div class="val" id="statGoals">0</div><div class="lbl">Góly</div></div>
+    </div>
+ 
+    <div class="section-title">⚽ Ligová tabulka</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Tým</th>
+            <th title="Zápasy">Z</th>
+            <th title="Výhry">V</th>
+            <th title="Remízy">R</th>
+            <th title="Prohry">P</th>
+            <th title="Skóre">Skóre</th>
+            <th title="Rozdíl skóre">+/-</th>
+            <th title="Body">Body</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr><td colspan="9"><div class="empty"><div class="icon">🏟️</div>Zatím žádné týmy. Přidej tým v panelu vpravo.</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+ 
+  <div class="sidebar">
+ 
+    <div class="card">
+      <div class="section-title" style="font-size:1rem">➕ Přidat tým</div>
+      <label>Název týmu</label>
+      <input type="text" id="inName" placeholder="FC Praha"/>
+ 
+      <label>Typ týmu</label>
+      <select id="inType">
+        <option value="zakladni">Základní část</option>
+        <option value="nadstavba">Nadstavba</option>
+      </select>
+ 
+      <div id="nadstavbaRow" style="display:none">
+        <label>Body ze základní části</label>
+        <input type="number" id="inBodyZZ" placeholder="např. 28" min="0"/>
+      </div>
+ 
+      <button class="btn btn-primary" onclick="addTeam()">Přidat tým</button>
+ 
+      <div id="teamList" style="margin-top:1rem"></div>
+    </div>
+ 
+    <div class="card">
+      <div class="section-title" style="font-size:1rem">📋 Zadat výsledek</div>
+ 
+      <label>Domácí tým</label>
+      <select id="inHome"></select>
+      <label>Hosté</label>
+      <select id="inAway"></select>
+ 
+      <div class="row2">
+        <div>
+          <label>Góly domácí</label>
+          <input type="number" id="inHomeG" min="0" value="0"/>
+        </div>
+        <div>
+          <label>Góly hosté</label>
+          <input type="number" id="inAwayG" min="0" value="0"/>
+        </div>
+      </div>
+ 
+      <button class="btn btn-primary" onclick="addMatch()">Uložit výsledek</button>
+      <button class="btn btn-outline" onclick="resetAll()">Resetovat vše</button>
+    </div>
+  </div>
+</main>
+ 
+<div class="toast" id="toast"></div>
+<script src="script.js"></script>
+ </body>
+ </html>
